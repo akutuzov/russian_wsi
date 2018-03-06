@@ -22,12 +22,19 @@ def main():
     arg('--model', help='Path to word2vec model')
     arg('--test', dest='testing', action='store_true', help='Make predictions?')
     arg('--2stage', dest='twostage', action='store_true', help='2-stage clustering?')
+    arg('--weights', dest='weights', action='store_true', help='Use word weights?')
     parser.set_defaults(testing=False)
     parser.set_defaults(twostage=False)
+    parser.set_defaults(weights=False)
     args = parser.parse_args()
 
     modelfile = args.model
-    model = gensim.models.Word2Vec.load(modelfile)
+    if modelfile.endswith('.bin.gz'):  # Word2vec binary format
+        model = gensim.models.KeyedVectors.load_word2vec_format(modelfile, binary=True)
+    elif modelfile.endswith('.vec.gz'):  # Word2vec text format
+        model = gensim.models.KeyedVectors.load_word2vec_format(modelfile, binary=False)
+    else:  # Gensim native format
+        model = gensim.models.Word2Vec.load(modelfile)
     model.init_sims(replace=True)
     dataset = args.input
 
@@ -60,7 +67,7 @@ def main():
                 bow = con.split()
                 bow = [w for w in bow if len(w.split('_')[0]) > 1]
                 bow = [b for b in bow if b.split('_')[0] != query.split('_')[0]]
-                fp = fingerprint(bow, model)
+                fp = fingerprint(bow, model, weights=args.weights)
                 lengths.append(len(bow))
             matrix[counter, :] = fp
             counter += 1

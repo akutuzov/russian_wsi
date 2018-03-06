@@ -6,10 +6,11 @@ from sklearn.manifold import TSNE
 import pylab as plot
 
 
-def fingerprint(text, model):
+def fingerprint(text, model, weights=False):
     """
     :param text: list of words
     :param model: word2vec model in Gensim format
+    :param weights: whether to use word weights based on frequencies (word2vec model should contain frequency data)
     :return: average vector of words in text
     """
     # Creating list of all words in the document, which are present in the model
@@ -22,7 +23,10 @@ def fingerprint(text, model):
     vectors = np.zeros((lw, model.vector_size))  # Creating empty matrix of vectors for words
     for i in list(range(lw)):  # Iterate over words in the text
         word = lexicon[i]
-        weight = wordweight(word, model)
+        if weights:
+            weight = wordweight(word, model)
+        else:
+            weight = 1.0
         vectors[i, :] = model[word] * weight  # Adding word and its vector to matrix
     semantic_fingerprint = np.sum(vectors, axis=0)  # Computing sum of all vectors in the document
     semantic_fingerprint = np.divide(semantic_fingerprint, lw)  # Computing average vector
