@@ -17,12 +17,12 @@ logging.basicConfig(format='%(asctime)s : %(levelname)s : %(message)s', level=lo
 def main():
     parser = argparse.ArgumentParser()
     arg = parser.add_argument
-    arg('--input', help='Path to input file with contexts')
-    arg('--output', help='Path to output file with predictions')
-    arg('--model', help='Path to word2vec model')
-    arg('--test', dest='testing', action='store_true', help='Make predictions?')
-    arg('--2stage', dest='twostage', action='store_true', help='2-stage clustering?')
+    arg('--input', help='Path to input file with contexts', required=True)
+    arg('--model', help='Path to word2vec model', required=True)
     arg('--weights', dest='weights', action='store_true', help='Use word weights?')
+    arg('--2stage', dest='twostage', action='store_true', help='2-stage clustering?')
+    arg('--test', dest='testing', action='store_true', help='Make predictions for test file with no gold labels?')
+
     parser.set_defaults(testing=False)
     parser.set_defaults(twostage=False)
     parser.set_defaults(weights=False)
