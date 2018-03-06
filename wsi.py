@@ -8,7 +8,7 @@ import sys
 import numpy as np
 import gensim
 import logging
-from sklearn.cluster import AffinityPropagation, SpectralClustering, KMeans
+from sklearn.cluster import AffinityPropagation, SpectralClustering
 from helpers import visualize, fingerprint, save
 
 logging.basicConfig(format='%(asctime)s : %(levelname)s : %(message)s', level=logging.INFO)
@@ -21,8 +21,11 @@ def main():
     arg('--output', help='Path to output file with predictions')
     arg('--model', help='Path to word2vec model')
     arg('--test', dest='testing', action='store_true', help='Make predictions?')
+    arg('--2stage', dest='twostage', action='store_true', help='2-stage clustering?')
     parser.set_defaults(testing=False)
+    parser.set_defaults(twostage=False)
     args = parser.parse_args()
+
     modelfile = args.model
     model = gensim.models.Word2Vec.load(modelfile)
     model.init_sims(replace=True)
@@ -62,6 +65,18 @@ def main():
             matrix[counter, :] = fp
             counter += 1
         clustering = AffinityPropagation(preference=preference, damping=damping).fit(matrix)
+        # Two-stage clustering
+        if args.twostage:
+            nclusters = len(clustering.cluster_centers_indices_)
+            if nclusters < 1:
+                print('Fallback to 1 cluster!', file=sys.stderr)
+                nclusters = 1
+            elif nclusters == len(contexts):
+                print('Fallback to 4 clusters!', file=sys.stderr)
+                nclusters = 4
+            clustering = SpectralClustering(n_clusters=nclusters, n_init=20,
+                                            assign_labels='discretize', n_jobs=2).fit(matrix)
+        # End two-stage clustering
         cur_predicted = clustering.labels_.tolist()
         predicted += cur_predicted
         if not args.testing:
