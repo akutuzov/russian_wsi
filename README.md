@@ -1,5 +1,5 @@
 # Word Sense Induction for Russian
-This is an implementation of Russian Word Sense induction system designed for the [RUSSE'18 shared task](http://russe.nlpub.org/2018/wsi/). This system [ranked 2nd](https://competitions.codalab.org/competitions/17810#results) among 19 participants for the **wiki-wiki** task. The paper describing it is under review now.
+This is an implementation of Russian Word Sense induction system designed for the [RUSSE'18 shared task](http://russe.nlpub.org/2018/wsi/). This system [ranked 2nd](https://competitions.codalab.org/competitions/17810#results) among 19 participants for the **wiki-wiki** task. The [paper](https://arxiv.org/abs/1805.02258) describing it is accepted to the 24rd International Conference on Computational Linguistics and Intellectual Technologies (Dialogue’2018).
 
 The approach is based on clustering averaged word vectors ("semantic fingerprints") of contexts for ambiguous words. Word vectors can be extracted from any word embedding model.
 
