@@ -85,8 +85,8 @@ def visualize(contexts, matrix, clusters, name, goldclusters=None):
         plot.scatter(x, y, 10, marker=markers[int(float(goldcluster))], color=colors[cluster])
         plot.annotate(context, xy=(x, y), size='x-small', color=colors[cluster])
 
-    plot.tick_params(axis='x', which='both', bottom='off', top='off', labelbottom='off')
-    plot.tick_params(axis='y', which='both', left='off', right='off', labelleft='off')
+    plot.tick_params(axis='x', which='both', bottom=False, top=False, labelbottom=False)
+    plot.tick_params(axis='y', which='both', left=False, right=False, labelleft=False)
     plot.legend(loc='best')
     # plot.show()  # Uncomment if you want to show the plots immediately.
     plot.savefig(name + '.png', dpi=300)
