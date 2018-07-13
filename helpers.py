@@ -87,7 +87,7 @@ def visualize(contexts, matrix, clusters, name, goldclusters=None):
 
     plot.tick_params(axis='x', which='both', bottom=False, top=False, labelbottom=False)
     plot.tick_params(axis='y', which='both', left=False, right=False, labelleft=False)
-    plot.legend(loc='best')
+    # plot.legend(loc='best')
     # plot.show()  # Uncomment if you want to show the plots immediately.
     plot.savefig(name + '.png', dpi=300)
     plot.close()
