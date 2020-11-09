@@ -67,7 +67,8 @@ def visualize(contexts, matrix, clusters, name, goldclusters=None):
     :param goldclusters: gold cluster labels
     :return: matrix projected to 2 dimensions
     """
-    perplexity = 10.0
+    perplexity = int(len(contexts) ** 0.5)
+    print(f"Perplexity: {perplexity}")
     if perplexity >= len(clusters):
         print('Error! Perplexity more than the number of points. Exiting...')
         exit()
@@ -82,14 +83,14 @@ def visualize(contexts, matrix, clusters, name, goldclusters=None):
     colors = ['black', 'red', 'cyan', 'lime', 'brown', 'yellow', 'magenta', 'goldenrod', 'navy', 'purple', 'silver']
     markers = ['.', 'o', '*', '+', 'x', 'D']
     for context, x, y, cluster, goldcluster in zip(contexts, xpositions, ypositions, clusters, goldclusters):
-        plot.scatter(x, y, 10, marker=markers[int(float(goldcluster))], color=colors[cluster])
+        plot.scatter(x, y, 40, marker=markers[int(float(goldcluster))], color=colors[cluster])
         plot.annotate(context, xy=(x, y), size='x-small', color=colors[cluster])
 
     plot.tick_params(axis='x', which='both', bottom=False, top=False, labelbottom=False)
     plot.tick_params(axis='y', which='both', left=False, right=False, labelleft=False)
     # plot.legend(loc='best')
     # plot.show()  # Uncomment if you want to show the plots immediately.
-    plot.savefig(name + '.png', dpi=300)
+    plot.savefig(name + '.png', dpi=300, bbox_inches="tight")
     plot.close()
     plot.clf()
     return y

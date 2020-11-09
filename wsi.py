@@ -36,7 +36,7 @@ def main():
     elif 'fasttext' in modelfile and modelfile.endswith('model'):  # fastText in Gensim native format
         model = gensim.models.fasttext.FastText.load(modelfile)
     else:  # word2vec in Gensim native format
-        model = gensim.models.Word2Vec.load(modelfile)
+        model = gensim.models.KeyedVectors.load(modelfile)
     model.init_sims(replace=True)
     dataset = args.input
 
@@ -72,7 +72,7 @@ def main():
                 lengths.append(len(bow))
             matrix[counter, :] = fp
             counter += 1
-        clustering = AffinityPropagation(preference=preference, damping=damping).fit(matrix)
+        clustering = AffinityPropagation(preference=preference, damping=damping, random_state=None).fit(matrix)
         # Two-stage clustering
         if args.twostage:
             nclusters = len(clustering.cluster_centers_indices_)
